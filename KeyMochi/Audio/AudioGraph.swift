@@ -112,8 +112,11 @@ final class AudioGraph: @unchecked Sendable {
     }
 
     /// Hot-path fire. Picks a voice, schedules the buffer at the given position.
-    /// Must be safe to call from the CGEventTap thread.
-    func fireSync(buffer: AVAudioPCMBuffer, at position: AVAudio3DPoint) {
+    /// `rateBias` is multiplied into the random pitch jitter — used by the engine
+    /// to nudge certain keys (e.g. spacebar) up or down in tone. Must be safe to
+    /// call from the CGEventTap thread.
+    func fireSync(buffer: AVAudioPCMBuffer, at position: AVAudio3DPoint,
+                  rateBias: Float = 1.0) {
         let state = graphSignposter.beginInterval("fireSync", id: graphSignposter.makeSignpostID())
         defer { graphSignposter.endInterval("fireSync", state) }
         let idx = voicePool.acquire()
@@ -121,7 +124,8 @@ final class AudioGraph: @unchecked Sendable {
         player.position = position
         player.renderingAlgorithm = .HRTFHQ
         player.volume = pow(10, Float.random(in: -gainJitterDb...gainJitterDb) / 20)
-        player.rate = pow(2, Float.random(in: -pitchJitterSemi...pitchJitterSemi) / 12)
+        let jitter = pow(2, Float.random(in: -pitchJitterSemi...pitchJitterSemi) / 12)
+        player.rate = rateBias * jitter
         if !player.isPlaying { player.play() }
         player.scheduleBuffer(buffer, at: nil, options: .interrupts,
                               completionHandler: nil)

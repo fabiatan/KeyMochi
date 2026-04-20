@@ -37,7 +37,9 @@ final class AppCoordinator {
         // All three refs are `@unchecked Sendable` classes with internally-locked state.
         let graphRef = audioGraph
         self.engine = SoundPackEngine(
-            audioFire: { buf, pos in graphRef.fireSync(buffer: buf, at: pos) },
+            audioFire: { buf, pos, rate in
+                graphRef.fireSync(buffer: buf, at: pos, rateBias: rate)
+            },
             layout: layout
         )
 

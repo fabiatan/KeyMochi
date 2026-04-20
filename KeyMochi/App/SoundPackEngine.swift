@@ -6,7 +6,15 @@ import os.lock
 /// Called synchronously from the CGEventTap callback via `handleSync`.
 /// Dependency-injects the audio fire callback for testability.
 final class SoundPackEngine: @unchecked Sendable {
-    typealias AudioFire = (AVAudioPCMBuffer, AVAudio3DPoint) -> Void
+    typealias AudioFire = (AVAudioPCMBuffer, AVAudio3DPoint, Float) -> Void
+
+    /// Per-key rate multiplier. The spacebar sample in most Mechvibes packs is
+    /// recorded from the largest resonant key body and sounds disproportionately
+    /// deep next to the normal alphas — pitching it up ~2 semitones keeps its
+    /// distinctive thock while rebalancing it against the rest of the pack.
+    private static let rateBiasByKey: [KeyID: Float] = [
+        .space: 1.122  // 2^(2/12) ≈ +2 semitones
+    ]
 
     private let audioFire: AudioFire
     private let layout: SpatialLayout
@@ -46,7 +54,8 @@ final class SoundPackEngine: @unchecked Sendable {
             return set.variants[idx]
         }
         guard let buffer = maybeBuffer else { return }
-        audioFire(buffer, position)
+        let rateBias = Self.rateBiasByKey[keyID] ?? 1.0
+        audioFire(buffer, position, rateBias)
     }
 
     /// Picks a variant index different from the last one (when possible).

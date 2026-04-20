@@ -68,9 +68,13 @@ struct SoundPackEngineTests {
 
 /// Test double that captures fires for inspection.
 final class FireRecorder: @unchecked Sendable {
-    struct Fire { let buffer: AVAudioPCMBuffer; let position: AVAudio3DPoint }
+    struct Fire {
+        let buffer: AVAudioPCMBuffer
+        let position: AVAudio3DPoint
+        let rateBias: Float
+    }
     private(set) var fires: [Fire] = []
-    func fire(buffer: AVAudioPCMBuffer, position: AVAudio3DPoint) {
-        fires.append(Fire(buffer: buffer, position: position))
+    func fire(buffer: AVAudioPCMBuffer, position: AVAudio3DPoint, rateBias: Float) {
+        fires.append(Fire(buffer: buffer, position: position, rateBias: rateBias))
     }
 }
