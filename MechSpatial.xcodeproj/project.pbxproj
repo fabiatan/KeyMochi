@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		FE00000000000000000000A2 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000A1 /* Fixtures */; };
+		FE00000000000000000000B2 /* Layouts in Resources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000B1 /* Layouts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +33,7 @@
 		1FB584992F95B78500DA776E /* MechSpatialTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MechSpatialTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FB584A32F95B78500DA776E /* MechSpatialUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MechSpatialUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE00000000000000000000A1 /* Fixtures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fixtures; path = MechSpatialTests/Fixtures; sourceTree = "<group>"; };
+		FE00000000000000000000B1 /* Layouts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Layouts; path = MechSpatial/Resources/Layouts; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -42,9 +44,6 @@
 		};
 		1FB5849C2F95B78500DA776E /* MechSpatialTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				FE00000000000000000000A3 /* Exceptions for Fixtures */,
-			);
 			path = MechSpatialTests;
 			sourceTree = "<group>";
 		};
@@ -54,16 +53,6 @@
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		FE00000000000000000000A3 /* Exceptions for Fixtures */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Fixtures,
-			);
-			target = 1FB584982F95B78500DA776E /* MechSpatialTests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		1FB584892F95B78400DA776E /* Frameworks */ = {
@@ -94,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				1FB5848E2F95B78400DA776E /* MechSpatial */,
+				FE00000000000000000000B1 /* Layouts */,
 				1FB5849C2F95B78500DA776E /* MechSpatialTests */,
 				FE00000000000000000000A1 /* Fixtures */,
 				1FB584A62F95B78500DA776E /* MechSpatialUITests */,
@@ -231,6 +221,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE00000000000000000000B2 /* Layouts in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
