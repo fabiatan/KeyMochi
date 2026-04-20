@@ -1,0 +1,14 @@
+{
+  "id": "test-pack",
+  "name": "Test Pack",
+  "author": "Test Suite",
+  "character": "clacky",
+  "version": "1.0.0",
+  "sound_format": "wav",
+  "key_define_type": "single",
+  "defines": {
+    "0": ["press/a.wav"],
+    "1": ["press/s.wav"]
+  },
+  "spatial_layout": "qwerty_us"
+}
