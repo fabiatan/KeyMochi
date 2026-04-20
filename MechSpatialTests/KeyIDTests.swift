@@ -39,4 +39,27 @@ struct KeyIDTests {
             #expect(!id.rawValue.isEmpty)
         }
     }
+
+    @Test("isModifier true for modifier keys", arguments: [
+        KeyID.shiftLeft, .shiftRight, .controlLeft, .controlRight,
+        .optionLeft, .optionRight, .commandLeft, .commandRight,
+        .capsLock, .function,
+    ])
+    func isModifierTrue(_ id: KeyID) {
+        #expect(id.isModifier)
+    }
+
+    @Test("isModifier false for non-modifier keys", arguments: [
+        KeyID.a, .space, .f1, .returnKey, .escape, .zero, .leftArrow,
+    ])
+    func isModifierFalse(_ id: KeyID) {
+        #expect(!id.isModifier)
+    }
+
+    @Test("byKeyCode covers every KeyID exactly once")
+    func mappingIsBijection() {
+        let mapped = Set(KeyID.byKeyCode.values)
+        #expect(mapped.count == KeyID.byKeyCode.count)
+        #expect(mapped == Set(KeyID.allCases))
+    }
 }
