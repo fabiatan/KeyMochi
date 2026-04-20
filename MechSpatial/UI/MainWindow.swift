@@ -35,7 +35,15 @@ struct MainWindow: View {
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
-        .background(Color.yellow.opacity(0.25))
-        .foregroundStyle(.primary)
+        .foregroundStyle(.yellow)
+        .background(Color.yellow.opacity(0.12))
+        .overlay(
+            Rectangle()
+                .fill(Color.yellow.opacity(0.4))
+                .frame(height: 1),
+            alignment: .bottom
+        )
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Warning: Bluetooth output adds 50 to 250 milliseconds of latency. Use wired headphones for instant feel.")
     }
 }

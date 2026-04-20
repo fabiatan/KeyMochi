@@ -6,22 +6,33 @@ import Combine
 @MainActor
 final class OutputDeviceObserver: ObservableObject {
     @Published private(set) var kind: OutputDeviceKind = .unknown
-    private var listenerProc: AudioObjectPropertyListenerProc?
+    private var listenerBlock: AudioObjectPropertyListenerBlock?
+    private var listenerAddress: AudioObjectPropertyAddress?
+    private var isStarted = false
 
     init() { refresh() }
 
     func start() {
+        guard !isStarted else { return }
         var address = AudioObjectPropertyAddress(
             mSelector: kAudioHardwarePropertyDefaultOutputDevice,
             mScope: kAudioObjectPropertyScopeGlobal,
             mElement: kAudioObjectPropertyElementMain)
-        AudioObjectAddPropertyListenerBlock(
-            AudioObjectID(kAudioObjectSystemObject),
-            &address,
-            DispatchQueue.main
-        ) { [weak self] _, _ in
+        let block: AudioObjectPropertyListenerBlock = { [weak self] _, _ in
             self?.refresh()
         }
+        let status = AudioObjectAddPropertyListenerBlock(
+            AudioObjectID(kAudioObjectSystemObject), &address, .main, block)
+        guard status == noErr else { return }
+        self.listenerBlock = block
+        self.listenerAddress = address
+        self.isStarted = true
+    }
+
+    nonisolated deinit {
+        guard var addr = listenerAddress, let block = listenerBlock else { return }
+        AudioObjectRemovePropertyListenerBlock(
+            AudioObjectID(kAudioObjectSystemObject), &addr, .main, block)
     }
 
     func refresh() {
@@ -50,8 +61,8 @@ final class OutputDeviceObserver: ObservableObject {
             mSelector: kAudioDevicePropertyTransportType,
             mScope: kAudioObjectPropertyScopeGlobal,
             mElement: kAudioObjectPropertyElementMain)
-        AudioObjectGetPropertyData(device, &addr, 0, nil, &size, &transport)
-        return transport
+        let status = AudioObjectGetPropertyData(device, &addr, 0, nil, &size, &transport)
+        return status == noErr ? transport : 0
     }
 
     private func classify(transport: UInt32, deviceID: AudioDeviceID) -> OutputDeviceKind {
