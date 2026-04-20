@@ -9,10 +9,11 @@ enum SoundCharacter: String, Codable, Sendable, CaseIterable {
 /// Round-robin variant set for a single key action (press or release).
 struct SampleSet: Sendable {
     /// Variant buffers (pre-decoded PCM). Non-empty.
-    var variants: [AVAudioPCMBuffer]
+    let variants: [AVAudioPCMBuffer]
 }
 
-/// A loaded sound pack. `press` and optional `release` maps KeyID → variants.
+/// A loaded sound pack. `press` and `release` map KeyID → variants;
+/// `release` is empty for packs without release samples.
 struct SoundPack: Sendable, Identifiable {
     let id: String
     let name: String
