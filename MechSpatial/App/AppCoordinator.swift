@@ -15,6 +15,7 @@ final class AppCoordinator {
     private let engine: SoundPackEngine
     private let router: KeystrokeRouter
     private let listener: KeystrokeListener
+    private var auditionTask: Task<Void, Never>?
 
     init(appState: AppState, permissions: PermissionService) throws {
         self.appState = appState
@@ -29,6 +30,9 @@ final class AppCoordinator {
         self.sampleCache = AudioSampleCache()
 
         let layout = try SpatialLayout.load(id: "qwerty_us")
+        // Hot path runs on the CGEventTap background thread:
+        // listener.onKeyDownSync → router.ingest → engine.handleSync → graph.fireSync.
+        // All three refs are `@unchecked Sendable` classes with internally-locked state.
         let graphRef = audioGraph
         self.engine = SoundPackEngine(
             audioFire: { buf, pos in graphRef.fireSync(buffer: buf, at: pos) },
@@ -93,16 +97,18 @@ final class AppCoordinator {
     private func wirePackIndex() {
         packIndex.auditionHandler = { [weak self] id in
             guard let self, let pack = self.sampleCache.get(id) else { return }
+            self.auditionTask?.cancel()
             self.engine.setPack(pack)
-            // Play a short sequence (A, S, D) via the active pack.
-            self.engine.handleSync(keyID: .a)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
-                self.engine.handleSync(keyID: .s)
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.24) {
-                self.engine.handleSync(keyID: .d)
-            }
             self.appState.selectedPackID = id
+            self.auditionTask = Task { @MainActor [weak self] in
+                self?.engine.handleSync(keyID: .a)
+                try? await Task.sleep(for: .milliseconds(120))
+                guard !Task.isCancelled else { return }
+                self?.engine.handleSync(keyID: .s)
+                try? await Task.sleep(for: .milliseconds(120))
+                guard !Task.isCancelled else { return }
+                self?.engine.handleSync(keyID: .d)
+            }
         }
     }
 
