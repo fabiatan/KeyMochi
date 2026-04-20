@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FE00000000000000000000A2 /* Fixtures in Resources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000A1 /* Fixtures */; };
 		FE00000000000000000000B2 /* Layouts in Resources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000B1 /* Layouts */; };
+		FE00000000000000000000C2 /* Packs in Resources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000C1 /* Packs */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +35,7 @@
 		1FB584A32F95B78500DA776E /* MechSpatialUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MechSpatialUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE00000000000000000000A1 /* Fixtures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fixtures; path = MechSpatialTests/Fixtures; sourceTree = "<group>"; };
 		FE00000000000000000000B1 /* Layouts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Layouts; path = MechSpatial/Resources/Layouts; sourceTree = "<group>"; };
+		FE00000000000000000000C1 /* Packs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Packs; path = Packs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -84,6 +86,7 @@
 			children = (
 				1FB5848E2F95B78400DA776E /* MechSpatial */,
 				FE00000000000000000000B1 /* Layouts */,
+				FE00000000000000000000C1 /* Packs */,
 				1FB5849C2F95B78500DA776E /* MechSpatialTests */,
 				FE00000000000000000000A1 /* Fixtures */,
 				1FB584A62F95B78500DA776E /* MechSpatialUITests */,
@@ -222,6 +225,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE00000000000000000000B2 /* Layouts in Resources */,
+				FE00000000000000000000C2 /* Packs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
