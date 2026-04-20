@@ -13,7 +13,7 @@ struct SoundPackEngineTests {
             return b
         }
         return SoundPack(
-            id: "fake", name: "Fake", author: "", character: .clacky,
+            id: "fake", name: "Fake", author: "", character: "clacky",
             version: "1", layoutID: "qwerty_us",
             press: [.a: SampleSet(variants: bufs)],
             release: [:]

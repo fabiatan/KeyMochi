@@ -16,7 +16,7 @@ struct SoundPackLoaderConfigTests {
         let config = try SoundPackLoader.parseConfig(at: fixtureURL)
         #expect(config.id == "test-pack")
         #expect(config.name == "Test Pack")
-        #expect(config.character == .clacky)
+        #expect(config.character == "clacky")
         #expect(config.defines["0"] == ["press/a.wav"])
         #expect(config.spatial_layout == "qwerty_us")
     }
@@ -45,7 +45,7 @@ struct SoundPackLoaderFullTests {
     func loadsPack() throws {
         let pack = try SoundPackLoader.load(from: fixtureURL)
         #expect(pack.id == "test-pack")
-        #expect(pack.character == .clacky)
+        #expect(pack.character == "clacky")
         #expect(pack.layoutID == "qwerty_us")
 
         let aSet = try #require(pack.press[.a])

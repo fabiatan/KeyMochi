@@ -43,7 +43,7 @@ struct PackCard: View {
                 Circle()
                     .fill(characterColor)
                     .frame(width: 10, height: 10)
-                Text(meta.character.rawValue.capitalized)
+                Text(meta.character.capitalized)
                     .font(.caption.monospaced())
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -75,13 +75,12 @@ struct PackCard: View {
     }
 
     private var characterColor: Color {
-        switch meta.character {
-        case .creamy:  return .orange
-        case .thocky:  return .brown
-        case .clacky:  return .cyan
-        case .poppy:   return .pink
-        case .clicky:  return .purple
-        }
+        // Stable palette pick from the character string's hash so new packs
+        // get a deterministic colour without touching this switch.
+        let palette: [Color] = [.orange, .brown, .cyan, .pink, .purple,
+                                .mint, .teal, .indigo, .yellow, .red]
+        let hash = meta.character.unicodeScalars.reduce(0) { $0 &+ Int($1.value) }
+        return palette[abs(hash) % palette.count]
     }
 }
 

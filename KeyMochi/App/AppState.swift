@@ -54,7 +54,7 @@ final class AppState {
     init() {
         let d = UserDefaults.standard
         self.isEnabled = d.object(forKey: Key.isEnabled) as? Bool ?? true
-        self.selectedPackID = d.string(forKey: Key.selectedPackID) ?? "clacky"
+        self.selectedPackID = d.string(forKey: Key.selectedPackID) ?? "cherrymx-black-abs"
         self.masterVolume = d.object(forKey: Key.masterVolume) as? Float ?? 0.7
         self.listenerX = d.object(forKey: Key.listenerX) as? Float ?? 0.0
         self.listenerY = d.object(forKey: Key.listenerY) as? Float ?? 0.0

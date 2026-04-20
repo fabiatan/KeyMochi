@@ -1,10 +1,11 @@
 import Foundation
 import AVFoundation
 
-/// Character category for a sound pack — one of the five reference profiles.
-enum SoundCharacter: String, Codable, Sendable, CaseIterable {
-    case creamy, thocky, clacky, poppy, clicky
-}
+/// Character label for a sound pack — free-form string that categorises
+/// the typing feel (e.g. "cherrymx-brown-pbt", "clacky"). Packs choose their
+/// own value; the UI derives a card colour from a stable hash so new values
+/// work without code changes.
+typealias SoundCharacter = String
 
 /// Round-robin variant set for a single key action (press or release).
 struct SampleSet: Sendable {
