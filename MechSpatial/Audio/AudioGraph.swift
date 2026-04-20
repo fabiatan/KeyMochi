@@ -1,6 +1,9 @@
 import Foundation
 import AVFoundation
 import CoreAudio
+import os.signpost
+
+private let graphSignposter = OSSignposter(subsystem: "com.fabian.mechspatial", category: "audio")
 
 /// Wraps AVAudioEngine + an AVAudioEnvironmentNode (HRTF) + a fixed pool
 /// of AVAudioPlayerNodes. Use `fireSync(buffer:at:)` on the hot path.
@@ -100,6 +103,8 @@ final class AudioGraph: @unchecked Sendable {
     /// Hot-path fire. Picks a voice, schedules the buffer at the given position.
     /// Must be safe to call from the CGEventTap thread.
     func fireSync(buffer: AVAudioPCMBuffer, at position: AVAudio3DPoint) {
+        let state = graphSignposter.beginInterval("fireSync", id: graphSignposter.makeSignpostID())
+        defer { graphSignposter.endInterval("fireSync", state) }
         let idx = voicePool.acquire()
         let player = players[idx]
         player.position = position

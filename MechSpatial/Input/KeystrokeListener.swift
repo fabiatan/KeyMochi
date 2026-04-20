@@ -2,6 +2,9 @@ import Foundation
 import CoreGraphics
 import AppKit
 import os.lock
+import os.signpost
+
+private let signposter = OSSignposter(subsystem: "com.fabian.mechspatial", category: "hotpath")
 
 /// Installs a system-wide CGEventTap for key-down events. The `onKeyDownSync`
 /// closure is called synchronously on the event-tap thread — it must not
@@ -77,7 +80,9 @@ final class KeystrokeListener: @unchecked Sendable {
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
             let isRepeat = event.getIntegerValueField(.keyboardEventAutorepeat) != 0
             let ts = CFAbsoluteTimeGetCurrent()
+            let state = signposter.beginInterval("key→fire", id: signposter.makeSignpostID())
             onKeyDownSync?(keyCode, ts, isRepeat)
+            signposter.endInterval("key→fire", state)
             continuation.yield(KeyEvent(
                 keyCode: keyCode, timestamp: ts, isRepeat: isRepeat))
         default:
