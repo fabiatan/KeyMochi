@@ -1,0 +1,25 @@
+# Xcode user state (per-developer UI state — recent files, open tabs,
+# breakpoint positions). Regenerated on every launch, pollutes diffs.
+**/xcuserdata/
+*.xcuserstate
+
+# Xcode build output
+build/
+DerivedData/
+*.xcworkspace/xcshareddata/swiftpm/
+
+# Swift Package Manager
+.swiftpm/
+Packages/
+Package.resolved
+
+# macOS
+.DS_Store
+
+# Editor
+*.swp
+*~
+.vscode/
+
+# Scratch
+/tmp/
