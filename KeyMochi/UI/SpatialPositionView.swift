@@ -20,7 +20,9 @@ struct SpatialPositionView: View {
                 let size = min(geo.size.width, geo.size.height)
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.secondary.opacity(0.4))
+                        .fill(Color.clear)
+                        .contentShape(Rectangle())
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.secondary.opacity(0.4)))
 
                     Text("Keyboard").font(.caption).foregroundStyle(.secondary)
                         .position(x: size/2, y: size * 0.1)
@@ -38,16 +40,24 @@ struct SpatialPositionView: View {
                         .fill(Color.blue)
                         .frame(width: 20, height: 20)
                         .position(headPosition(in: size))
-                        .gesture(
-                            DragGesture()
-                                .onChanged { v in
-                                    let (x, z) = cgToMeters(v.location, size: size)
-                                    appState.listenerX = x.clamped(to: extent)
-                                    appState.listenerZ = z.clamped(to: extent)
-                                }
-                        )
+                        .allowsHitTesting(false)
                 }
                 .frame(width: size, height: size)
+                .contentShape(Rectangle())
+                .coordinateSpace(name: "pad")
+                .gesture(
+                    DragGesture(minimumDistance: 0, coordinateSpace: .named("pad"))
+                        .onChanged { v in
+                            let (x, z) = cgToMeters(v.location, size: size)
+                            appState.listenerX = x.clamped(to: extent)
+                            appState.listenerZ = z.clamped(to: extent)
+                        }
+                )
+                .accessibilityElement()
+                .accessibilityLabel("Listener position pad")
+                .accessibilityValue(String(
+                    format: "x %+0.2f meters, z %+0.2f meters",
+                    appState.listenerX, appState.listenerZ))
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
 
