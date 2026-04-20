@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 import AppKit
+import Combine
 
 /// Owns all singletons and wires the hot path together:
 /// KeystrokeListener → KeystrokeRouter → SoundPackEngine → AudioGraph.
@@ -16,6 +17,7 @@ final class AppCoordinator {
     private let router: KeystrokeRouter
     private let listener: KeystrokeListener
     private var auditionTask: Task<Void, Never>?
+    let deviceObserver = OutputDeviceObserver()
 
     init(appState: AppState, permissions: PermissionService) throws {
         self.appState = appState
@@ -54,6 +56,13 @@ final class AppCoordinator {
         selectActivePack()
         wirePackIndex()
         startListeningIfPermitted()
+        deviceObserver.start()
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            for await kind in self.deviceObserver.$kind.values {
+                self.appState.outputDeviceKind = kind
+            }
+        }
     }
 
     // MARK: - Pack management

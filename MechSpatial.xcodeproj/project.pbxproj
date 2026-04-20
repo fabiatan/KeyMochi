@@ -35,7 +35,7 @@
 		1FB584A32F95B78500DA776E /* MechSpatialUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MechSpatialUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE00000000000000000000A1 /* Fixtures */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fixtures; path = MechSpatialTests/Fixtures; sourceTree = "<group>"; };
 		FE00000000000000000000B1 /* Layouts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Layouts; path = MechSpatial/Resources/Layouts; sourceTree = "<group>"; };
-		FE00000000000000000000C1 /* Packs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Packs; path = Packs; sourceTree = "<group>"; };
+		FE00000000000000000000C1 /* Packs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Packs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
