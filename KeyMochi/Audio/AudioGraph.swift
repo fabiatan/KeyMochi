@@ -17,8 +17,19 @@ final class AudioGraph: @unchecked Sendable {
     /// Listener at origin by default, facing -Z.
     private(set) var listenerPosition: AVAudio3DPoint = .init(x: 0, y: 0, z: 0)
 
-    init(voiceCount: Int = 16) {
+    /// Per-fire timbre variation. Without this every press plays the exact
+    /// same sample — the "machine gun" tell of cheap keyboard sims. Real
+    /// switches vary slightly in bottoming pressure (→ gain) and tolerance
+    /// (→ pitch/speed). Applied to player.volume and AVAudio3DMixing.rate.
+    private let gainJitterDb: Float
+    private let pitchJitterSemi: Float
+
+    init(voiceCount: Int = 16,
+         gainJitterDb: Float = 2.0,
+         pitchJitterSemi: Float = 0.5) {
         self.voicePool = VoicePool(capacity: voiceCount)
+        self.gainJitterDb = gainJitterDb
+        self.pitchJitterSemi = pitchJitterSemi
     }
 
     func prepare() throws {
@@ -109,6 +120,8 @@ final class AudioGraph: @unchecked Sendable {
         let player = players[idx]
         player.position = position
         player.renderingAlgorithm = .HRTFHQ
+        player.volume = pow(10, Float.random(in: -gainJitterDb...gainJitterDb) / 20)
+        player.rate = pow(2, Float.random(in: -pitchJitterSemi...pitchJitterSemi) / 12)
         if !player.isPlaying { player.play() }
         player.scheduleBuffer(buffer, at: nil, options: .interrupts,
                               completionHandler: nil)
